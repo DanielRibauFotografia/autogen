@@ -1,0 +1,11 @@
+# Dependências específicas para o PhotoAgent
+# Herda as dependências gerais do requirements.txt principal
+
+# Processamento de imagens
+Pillow==10.1.0
+
+# Análise de metadados
+exifread==3.0.0
+
+# Detecção de duplicatas (opcional)
+imagehash==4.3.1

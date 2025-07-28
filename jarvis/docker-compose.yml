@@ -1,0 +1,175 @@
+version: '3.8'
+
+services:
+  # Serviço de mensageria RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: jarvis-rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"     # AMQP port
+      - "15672:15672"   # Management UI port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - jarvis-network
+
+  # Orquestrador principal
+  orchestrator:
+    build: ./orchestrator
+    container_name: jarvis-orchestrator
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./memory:/app/memory
+      - ./logs:/app/logs
+    networks:
+      - jarvis-network
+    restart: unless-stopped
+
+  # Agente de Fotografia
+  photo-agent:
+    build: ./agents/photo_agent
+    container_name: jarvis-photo-agent
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - AGENT_NAME=photo-agent
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./memory:/app/memory
+      - ./logs:/app/logs
+      - ./data/photos:/app/photos
+    networks:
+      - jarvis-network
+    restart: unless-stopped
+
+  # Agente de Marketing
+  marketing-agent:
+    build: ./agents/marketing_agent
+    container_name: jarvis-marketing-agent
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - AGENT_NAME=marketing-agent
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./memory:/app/memory
+      - ./logs:/app/logs
+    networks:
+      - jarvis-network
+    restart: unless-stopped
+
+  # Agente de Redes Sociais
+  social-media-agent:
+    build: ./agents/social_media_agent
+    container_name: jarvis-social-media-agent
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - AGENT_NAME=social-media-agent
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./memory:/app/memory
+      - ./logs:/app/logs
+    networks:
+      - jarvis-network
+    restart: unless-stopped
+
+  # Agente de CRM
+  crm-agent:
+    build: ./agents/crm_agent
+    container_name: jarvis-crm-agent
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - AGENT_NAME=crm-agent
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./memory:/app/memory
+      - ./logs:/app/logs
+    networks:
+      - jarvis-network
+    restart: unless-stopped
+
+  # Agente de Calendário
+  calendar-agent:
+    build: ./agents/calendar_agent
+    container_name: jarvis-calendar-agent
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - AGENT_NAME=calendar-agent
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./memory:/app/memory
+      - ./logs:/app/logs
+    networks:
+      - jarvis-network
+    restart: unless-stopped
+
+  # Agente Financeiro
+  finance-agent:
+    build: ./agents/finance_agent
+    container_name: jarvis-finance-agent
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - AGENT_NAME=finance-agent
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./memory:/app/memory
+      - ./logs:/app/logs
+    networks:
+      - jarvis-network
+    restart: unless-stopped
+
+  # Agente de Tarefas
+  task-agent:
+    build: ./agents/task_agent
+    container_name: jarvis-task-agent
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - AGENT_NAME=task-agent
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./memory:/app/memory
+      - ./logs:/app/logs
+    networks:
+      - jarvis-network
+    restart: unless-stopped
+
+networks:
+  jarvis-network:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:
+    driver: local
