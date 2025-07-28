@@ -1,0 +1,62 @@
+# Logs e arquivos temporários
+logs/
+*.log
+
+# Arquivos de dados
+data/
+photos/
+backup/
+
+# Ambiente virtual Python
+venv/
+env/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Configurações locais
+.env
+.env.local
+
+# Docker
+.dockerignore
+
+# VS Code
+.vscode/settings.json
+
+# macOS
+.DS_Store
+
+# Backup files
+*.tar.gz
+backup_*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Memory data (development)
+memory/data/
+memory/*.json
+
+# Test coverage
+.coverage
+htmlcov/
+
+# Distribution
+dist/
+build/
+*.egg-info/
