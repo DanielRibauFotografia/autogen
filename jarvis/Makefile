@@ -4,7 +4,7 @@
 .PHONY: help setup up down logs status clean rebuild test lint format debug install
 
 # Configurações
-DOCKER_COMPOSE = docker-compose
+DOCKER_COMPOSE = docker compose
 PYTHON = python3
 PIP = pip3
 
@@ -146,7 +146,7 @@ check-deps: ## ✅ Verifica dependências do sistema
 	@echo "$(GREEN)Verificando dependências...$(NC)"
 	@echo "Python: $$(python3 --version)"
 	@echo "Docker: $$(docker --version)"
-	@echo "Docker Compose: $$(docker-compose --version)"
+	@echo "Docker Compose: $$(docker compose version || docker-compose --version 2>/dev/null || echo 'Not found')"
 	@echo "$(GREEN)✅ Dependências verificadas$(NC)"
 
 backup-memory: ## 💾 Backup do sistema de memória

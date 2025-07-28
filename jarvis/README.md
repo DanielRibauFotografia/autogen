@@ -69,7 +69,10 @@ python3 --version  # Deve mostrar 3.10+
 # 2. Docker Desktop para Mac (ARM64)
 docker --version   # Teste se está funcionando
 
-# 3. Git
+# 3. Docker Compose (incluído no Docker Desktop)
+docker compose version  # ou docker-compose --version
+
+# 4. Git
 git --version
 ```
 
@@ -131,13 +134,20 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # 4. Construa as imagens Docker
-docker-compose build
+docker compose build
 
 # 5. Inicie os serviços
-docker-compose up -d
+docker compose up -d
 ```
 
 ## ⚡ Uso Rápido
+
+### 🎬 Demo Rápido (5 minutos)
+
+```bash
+# Execute o demo interativo (não requer Docker)
+./demo.sh
+```
 
 ### Comandos Básicos
 
@@ -485,10 +495,10 @@ make down && make up
 docker ps | grep rabbitmq
 
 # Reinicie o RabbitMQ
-docker-compose restart rabbitmq
+docker compose restart rabbitmq
 
 # Veja os logs do RabbitMQ
-docker-compose logs rabbitmq
+docker compose logs rabbitmq
 ```
 
 #### 4. Agente não responde
@@ -529,15 +539,15 @@ deploy:
 make logs
 
 # Logs específicos por serviço
-docker-compose logs photo-agent
-docker-compose logs rabbitmq
-docker-compose logs orchestrator
+docker compose logs photo-agent
+docker compose logs rabbitmq
+docker compose logs orchestrator
 
 # Logs em tempo real
-docker-compose logs -f photo-agent
+docker compose logs -f photo-agent
 
 # Limpar logs
-docker-compose down && docker system prune -f
+docker compose down && docker system prune -f
 ```
 
 ## 📚 Recursos de Aprendizado

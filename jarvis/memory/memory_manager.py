@@ -395,23 +395,26 @@ class MemoryManager:
     def _matches_query(self, memory: Dict[str, Any], query: Dict[str, Any]) -> bool:
         """Verifica se uma memória corresponde aos critérios de busca."""
         for key, value in query.items():
+            # Primeiro verifica no nível superior
             if key in memory:
                 if isinstance(value, str):
                     if value.lower() not in str(memory[key]).lower():
                         return False
                 elif memory[key] != value:
                     return False
-            else:
-                # Busca aninhada nos dados
-                data_key = 'data' if 'data' in memory else memory
-                if isinstance(data_key, dict) and key in data_key:
+            # Busca aninhada nos dados
+            elif 'data' in memory and isinstance(memory['data'], dict):
+                data = memory['data']
+                if key in data:
                     if isinstance(value, str):
-                        if value.lower() not in str(data_key[key]).lower():
+                        if value.lower() not in str(data[key]).lower():
                             return False
-                    elif data_key[key] != value:
+                    elif data[key] != value:
                         return False
                 else:
                     return False
+            else:
+                return False
         
         return True
 
